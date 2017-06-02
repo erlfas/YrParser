@@ -84,7 +84,7 @@ func main() {
 		go downloadAndSave(urls[i], doneChannel)
 	}
 
-	// wait
+	// wait for go routines to finish
 	for i := 0; i < len(urls); i++ {
 		<-doneChannel
 	}
