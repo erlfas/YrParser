@@ -70,9 +70,31 @@ type Weatherdata struct {
 }
 
 func main() {
-	resp, err := http.Get("http://www.yr.no/sted/Norge/Hordaland/Bergen/Bergen/varsel_time_for_time.xml")
+
+	doneChannel := make(chan bool, 5)
+
+	urls := make([]string, 5)
+	urls[0] = "http://www.yr.no/sted/Norge/Hordaland/Bergen/Bergen/varsel_time_for_time.xml"
+	urls[1] = "http://www.yr.no/sted/Norge/M%C3%B8re_og_Romsdal/Rauma/%C3%85ndalsnes/varsel.xml"
+	urls[2] = "http://www.yr.no/sted/Norge/M%C3%B8re_og_Romsdal/Molde/Molde/varsel.xml"
+	urls[3] = "http://www.yr.no/sted/Norge/M%C3%B8re_og_Romsdal/Kristiansund/Kristiansund/varsel.xml"
+	urls[4] = "http://www.yr.no/place/Norway/M%C3%B8re_og_Romsdal/%C3%85lesund/%C3%85lesund/forecast.xml"
+
+	for i := 0; i < len(urls); i++ {
+		go downloadAndSave(urls[i], doneChannel)
+	}
+
+	// wait
+	for i := 0; i < len(urls); i++ {
+		<-doneChannel
+	}
+}
+
+func downloadAndSave(url string, done chan bool) {
+	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("Error reading from yr.no")
+		fmt.Print("Error reading from ")
+		fmt.Println(url)
 		return
 	}
 	defer resp.Body.Close()
@@ -83,7 +105,10 @@ func main() {
 		log.Panic(err.Error())
 	}
 
-	saveWeatherdata(weatherData)
+	fmt.Println(weatherData.Location.Name)
+	//saveWeatherdata(weatherData)
+
+	done <- true
 }
 
 func saveWeatherdata(x interface{}) (err error) {
