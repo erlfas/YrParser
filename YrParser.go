@@ -105,8 +105,7 @@ func downloadAndSave(url string, done chan bool) {
 		log.Panic(err.Error())
 	}
 
-	fmt.Println(weatherData.Location.Name)
-	//saveWeatherdata(weatherData)
+	saveWeatherdata(weatherData)
 
 	done <- true
 }
@@ -117,6 +116,6 @@ func saveWeatherdata(x interface{}) (err error) {
 	if err != nil {
 		return
 	}
-	fmt.Println(string(xBytes))
+	http.Post("http://localhost:9200/yr/weatherdata", "application/json", bytes.NewBuffer(xBytes))
 	return
 }
