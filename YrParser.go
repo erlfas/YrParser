@@ -74,10 +74,10 @@ func main() {
 	doneChannel := make(chan bool, 5)
 
 	urls := make([]string, 5)
-	urls[0] = "http://www.yr.no/sted/Norge/Hordaland/Bergen/Bergen/varsel_time_for_time.xml"
-	urls[1] = "http://www.yr.no/sted/Norge/M%C3%B8re_og_Romsdal/Rauma/%C3%85ndalsnes/varsel.xml"
-	urls[2] = "http://www.yr.no/sted/Norge/M%C3%B8re_og_Romsdal/Molde/Molde/varsel.xml"
-	urls[3] = "http://www.yr.no/sted/Norge/M%C3%B8re_og_Romsdal/Kristiansund/Kristiansund/varsel.xml"
+	urls[0] = "http://www.yr.no/place/Norway/Hordaland/Bergen/Bergen/forecast.xml"
+	urls[1] = "http://www.yr.no/place/Norway/M%C3%B8re_og_Romsdal/Rauma/%C3%85ndalsnes/forecast.xml"
+	urls[2] = "http://www.yr.no/place/Norway/M%C3%B8re_og_Romsdal/Molde/Molde/forecast.xml"
+	urls[3] = "http://www.yr.no/place/Norway/M%C3%B8re_og_Romsdal/Kristiansund/Kristiansund/forecast.xml"
 	urls[4] = "http://www.yr.no/place/Norway/M%C3%B8re_og_Romsdal/%C3%85lesund/%C3%85lesund/forecast.xml"
 
 	for i := 0; i < len(urls); i++ {
@@ -90,12 +90,12 @@ func main() {
 	}
 }
 
-func downloadAndSave(url string, done chan bool) {
+func getWeatherdata(url string) *Weatherdata {
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Print("Error reading from ")
 		fmt.Println(url)
-		return
+		panic(err)
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
@@ -104,6 +104,12 @@ func downloadAndSave(url string, done chan bool) {
 	if err := xml.NewDecoder(xmlReader).Decode(weatherData); err != nil {
 		log.Panic(err.Error())
 	}
+
+	return weatherData
+}
+
+func downloadAndSave(url string, done chan bool) {
+	weatherData := getWeatherdata(url)
 
 	saveWeatherdata(weatherData)
 
