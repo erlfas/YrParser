@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"testing"
 )
 
@@ -25,5 +27,13 @@ func TestFindAllByCity(t *testing.T) {
 
 func TestDoFindAllByCity2(t *testing.T) {
 	result := doFindAllByCity2(CityQuery{"Bergen"})
-	fmt.Println(result)
+	//fmt.Println(result)
+
+	var queryResult QueryResult
+	if err := json.Unmarshal([]byte(result), &queryResult); err != nil {
+		log.Panic(err.Error())
+		panic(err)
+	}
+
+	fmt.Println(queryResult)
 }
