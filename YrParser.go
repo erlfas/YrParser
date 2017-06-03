@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -89,13 +90,7 @@ func main() {
 	}
 }
 
-func doPOST(url string, x interface{}) []byte {
-	xBytes, err := json.MarshalIndent(x, "", " ")
-	if err != nil {
-		log.Panic(err.Error())
-		panic(err)
-	}
-
+func doPOSTWithBytes(url string, xBytes []byte) []byte {
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(xBytes))
 	if err != nil {
 		log.Panic(err.Error())
@@ -110,6 +105,16 @@ func doPOST(url string, x interface{}) []byte {
 	}
 
 	return body
+}
+
+func doPOST(url string, x interface{}) []byte {
+	xBytes, err := json.MarshalIndent(x, "", " ")
+	if err != nil {
+		log.Panic(err.Error())
+		panic(err)
+	}
+
+	return doPOSTWithBytes(url, xBytes)
 }
 
 func doGET(url string) []byte {
@@ -137,6 +142,8 @@ func getWeatherdata(url string) *Weatherdata {
 		log.Panic(err.Error())
 		panic(err)
 	}
+
+	fmt.Println(weatherData.Location.Name)
 
 	return weatherData
 }

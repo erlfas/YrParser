@@ -3,11 +3,19 @@ package main
 import (
 	"bytes"
 	"html/template"
-	"net/http"
+	"log"
 )
 
 type CityQuery struct {
 	City string
+}
+
+func findAllByCity2(city CityQuery) string {
+	var buffer bytes.Buffer
+	buffer.WriteString("http://localhost:9200/yr/weatherdata/_search?q=")
+	buffer.WriteString(city.City)
+	url := buffer.String()
+	return url
 }
 
 func findAllByCity(city CityQuery) (string, string) {
@@ -22,11 +30,13 @@ func findAllByCity(city CityQuery) (string, string) {
 	}`
 	queryTemplate, err := template.New("query").Parse(queryTemplateContent)
 	if err != nil {
+		log.Panic(err.Error())
 		panic(err)
 	}
 	var buf bytes.Buffer
 	err = queryTemplate.Execute(&buf, city)
 	if err != nil {
+		log.Panic(err.Error())
 		panic(err)
 	}
 	query := buf.String()
@@ -34,7 +44,8 @@ func findAllByCity(city CityQuery) (string, string) {
 	return url, query
 }
 
-func doFindAllByCity(city CityQuery) {
-	url, query := findAllByCity(city)
-	http.Post(url, )
+func doFindAllByCity2(city CityQuery) string {
+	url := findAllByCity2(city)
+	byteResults := doPOSTWithBytes(url, []byte(""))
+	return string(byteResults)
 }

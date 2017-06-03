@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestFindAllByCity(t *testing.T) {
 	url, query := findAllByCity(CityQuery{"Bergen"})
@@ -18,4 +21,9 @@ func TestFindAllByCity(t *testing.T) {
 	if query != expectedQuery {
 		t.Error("Query is not as expected")
 	}
+}
+
+func TestDoFindAllByCity2(t *testing.T) {
+	result := doFindAllByCity2(CityQuery{"Bergen"})
+	fmt.Println(result)
 }
