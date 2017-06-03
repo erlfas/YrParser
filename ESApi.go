@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"html/template"
+	"net/http"
 )
 
 type CityQuery struct {
@@ -31,4 +32,9 @@ func findAllByCity(city CityQuery) (string, string) {
 	query := buf.String()
 
 	return url, query
+}
+
+func doFindAllByCity(city CityQuery) {
+	url, query := findAllByCity(city)
+	http.Post(url, )
 }

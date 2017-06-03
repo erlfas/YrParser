@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -90,19 +89,53 @@ func main() {
 	}
 }
 
-func getWeatherdata(url string) *Weatherdata {
-	resp, err := http.Get(url)
+func doPOST(url string, x interface{}) []byte {
+	xBytes, err := json.MarshalIndent(x, "", " ")
 	if err != nil {
-		fmt.Print("Error reading from ")
-		fmt.Println(url)
+		log.Panic(err.Error())
+		panic(err)
+	}
+
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(xBytes))
+	if err != nil {
+		log.Panic(err.Error())
 		panic(err)
 	}
 	defer resp.Body.Close()
+
 	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Panic(err.Error())
+		panic(err)
+	}
+
+	return body
+}
+
+func doGET(url string) []byte {
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Panic(err.Error())
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Panic(err.Error())
+		panic(err)
+	}
+
+	return body
+}
+
+func getWeatherdata(url string) *Weatherdata {
+	body := doGET(url)
 	xmlReader := bytes.NewReader(body)
 	weatherData := new(Weatherdata)
 	if err := xml.NewDecoder(xmlReader).Decode(weatherData); err != nil {
 		log.Panic(err.Error())
+		panic(err)
 	}
 
 	return weatherData
@@ -117,11 +150,6 @@ func downloadAndSave(url string, done chan bool) {
 }
 
 func saveWeatherdata(x interface{}) (err error) {
-	var xBytes []byte
-	xBytes, err = json.MarshalIndent(x, "", " ")
-	if err != nil {
-		return
-	}
-	http.Post("http://localhost:9200/yr/weatherdata", "application/json", bytes.NewBuffer(xBytes))
+	doPOST("http://localhost:9200/yr/weatherdata", x)
 	return
 }
