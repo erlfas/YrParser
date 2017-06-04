@@ -7,6 +7,28 @@ import (
 	"testing"
 )
 
+func TestDeleteWeatherdataByID(t *testing.T) {
+	var id string = "AVxtldwDW33Zbbv0nvtu"
+	var result *DeleteResult = deleteWeatherdataByID(id)
+
+	fmt.Println(*result)
+
+	if result.ID != id {
+		t.Error("Returned id is different from input id")
+	}
+
+	if result.Index != "yr" {
+		t.Error("Unexpected index")
+	}
+
+	if result.Type != "weatherdata" {
+		t.Error("Unexpected type")
+	}
+
+	if result.Found == true {
+		t.Error("Did not expect to delete a document")
+	}
+}
 func TestFindAllByCity(t *testing.T) {
 	url, query := findAllByCity(CityQuery{"Bergen"})
 	if url != "http://localhost:9200/yr/weatherdata/_search?pretty" {

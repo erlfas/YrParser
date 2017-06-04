@@ -2,11 +2,12 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"html/template"
 	"log"
 )
 
-func deleteWeatherdataByID(id string) string {
+func deleteWeatherdataByID(id string) *DeleteResult {
 	var buffer bytes.Buffer
 	buffer.WriteString("http://localhost:9200/yr/weatherdata/")
 	buffer.WriteString(id)
@@ -14,7 +15,13 @@ func deleteWeatherdataByID(id string) string {
 
 	byteResults := doDELETE(url)
 
-	return string(byteResults)
+	var deleteResult DeleteResult
+	if err := json.Unmarshal(byteResults, &deleteResult); err != nil {
+		log.Println(err.Error())
+		return nil
+	}
+
+	return &deleteResult
 }
 
 type CityQuery struct {

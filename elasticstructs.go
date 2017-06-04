@@ -131,3 +131,11 @@ type Hits struct {
 type QueryResult struct {
 	Hits Hits `json:"hits"`
 }
+
+type DeleteResult struct {
+	Found   bool   `json:"found"`
+	Index   string `json:"_index"`
+	Type    string `json:"_type"`
+	ID      string `json:"_id"`
+	Version int64  `json:"_version"`
+}
