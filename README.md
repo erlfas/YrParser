@@ -40,3 +40,37 @@ GET localhost:9200/_search?pretty
 	}
 }
 ```
+
+### Find average temperature by city
+
+With curl:
+
+```
+curl -XGET 'localhost:9200/yr/weatherdata/_search?pretty' -H 'Content-Type: application/json' -d'{ "aggs": { "avg_temperature": { "avg": { "field": "Forecast.Tabular.Time.Temperature.Value" } } }, "query": { "bool": { "must": [ { "match": { "Location.Name": "Bergen" } } ] } } }' | less
+```
+
+Pretty:
+
+ ```
+ GET localhost:9200/yr/weatherdata/_search?pretty
+ {
+	"aggs": {
+		"avg_temperature": {
+			"avg": {
+				"field": "Forecast.Tabular.Time.Temperature.Value"
+			}
+		}
+	},
+	"query": {
+		"bool": {
+			"must": [ 
+				{
+					"match": {
+						"Location.Name": "Bergen"
+					}
+				}
+			]
+		}
+	}
+}
+ ```
