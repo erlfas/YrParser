@@ -8,18 +8,41 @@ import (
 	"net/http"
 )
 
-func doPOSTWithBytes(url string, xBytes []byte) []byte {
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(xBytes))
+func doDELETE(id string) []byte {
+	client := http.Client{}
+	req, err := http.NewRequest("DELETE", "http://localhost:9200/yr/weatherdata", nil)
 	if err != nil {
-		log.Panic(err.Error())
-		panic(err)
+		log.Println(err.Error())
+		return nil
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err.Error())
+		return nil
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Panic(err.Error())
-		panic(err)
+		log.Println(err.Error())
+		return nil
+	}
+
+	return body
+}
+
+func doPOSTWithBytes(url string, xBytes []byte) []byte {
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(xBytes))
+	if err != nil {
+		log.Println(err.Error())
+		return nil
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err.Error())
+		return nil
 	}
 
 	return body
@@ -28,8 +51,8 @@ func doPOSTWithBytes(url string, xBytes []byte) []byte {
 func doPOST(url string, x interface{}) []byte {
 	xBytes, err := json.MarshalIndent(x, "", " ")
 	if err != nil {
-		log.Panic(err.Error())
-		panic(err)
+		log.Println(err.Error())
+		return nil
 	}
 
 	return doPOSTWithBytes(url, xBytes)
@@ -38,15 +61,15 @@ func doPOST(url string, x interface{}) []byte {
 func doGET(url string) []byte {
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Panic(err.Error())
-		panic(err)
+		log.Println(err.Error())
+		return nil
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Panic(err.Error())
-		panic(err)
+		log.Println(err.Error())
+		return nil
 	}
 
 	return body
