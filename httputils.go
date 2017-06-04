@@ -8,9 +8,9 @@ import (
 	"net/http"
 )
 
-func doDELETE(id string) []byte {
+func doDELETE(url string) []byte {
 	client := http.Client{}
-	req, err := http.NewRequest("DELETE", "http://localhost:9200/yr/weatherdata", nil)
+	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		log.Println(err.Error())
 		return nil
