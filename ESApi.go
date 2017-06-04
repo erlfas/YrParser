@@ -7,7 +7,41 @@ import (
 	"log"
 )
 
-func deleteWeatherdataByID(id string) *DeleteResult {
+func getWeatherdataByID(id string) *SingularQueryResult {
+	var buffer bytes.Buffer
+	buffer.WriteString("http://localhost:9200/yr/weatherdata/")
+	buffer.WriteString(id)
+	url := buffer.String()
+
+	byteResults := doGET(url)
+
+	var queryResult SingularQueryResult
+	if err := json.Unmarshal(byteResults, &queryResult); err != nil {
+		log.Println(err.Error())
+		return nil
+	}
+
+	return &queryResult
+}
+
+func updateWeatherdataByID(id string, weatherdata *Weatherdata) *CRUDResult {
+	var buffer bytes.Buffer
+	buffer.WriteString("http://localhost:9200/yr/weatherdata/")
+	buffer.WriteString(id)
+	url := buffer.String()
+
+	byteResults := doUPDATE(url, weatherdata)
+
+	var updateResult CRUDResult
+	if err := json.Unmarshal(byteResults, &updateResult); err != nil {
+		log.Println(err.Error())
+		return nil
+	}
+
+	return &updateResult
+}
+
+func deleteWeatherdataByID(id string) *CRUDResult {
 	var buffer bytes.Buffer
 	buffer.WriteString("http://localhost:9200/yr/weatherdata/")
 	buffer.WriteString(id)
@@ -15,7 +49,7 @@ func deleteWeatherdataByID(id string) *DeleteResult {
 
 	byteResults := doDELETE(url)
 
-	var deleteResult DeleteResult
+	var deleteResult CRUDResult
 	if err := json.Unmarshal(byteResults, &deleteResult); err != nil {
 		log.Println(err.Error())
 		return nil

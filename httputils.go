@@ -8,13 +8,33 @@ import (
 	"net/http"
 )
 
-func doDELETE(url string) []byte {
-	client := http.Client{}
-	req, err := http.NewRequest("DELETE", url, nil)
+func doUPDATE(url string, x interface{}) []byte {
+	xBytes, err := json.MarshalIndent(x, "", " ")
 	if err != nil {
 		log.Println(err.Error())
 		return nil
 	}
+
+	body := doMethod("UPDATE", url, string(xBytes))
+
+	return body
+}
+
+func doDELETE(url string) []byte {
+	body := doMethod("DELETE", url, "")
+
+	return body
+}
+
+func doMethod(method string, url string, jsonBody string) []byte {
+	client := http.Client{}
+
+	req, err := http.NewRequest(method, url, bytes.NewBufferString(jsonBody))
+	if err != nil {
+		log.Println(err.Error())
+		return nil
+	}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println(err.Error())

@@ -132,7 +132,11 @@ type QueryResult struct {
 	Hits Hits `json:"hits"`
 }
 
-type DeleteResult struct {
+type SingularQueryResult struct {
+	Hit
+}
+
+type CRUDResult struct {
 	Found   bool   `json:"found"`
 	Index   string `json:"_index"`
 	Type    string `json:"_type"`

@@ -7,9 +7,35 @@ import (
 	"testing"
 )
 
+func TestGetWeatherdataByID(t *testing.T) {
+	id := "AVxtAEeRW33Zbbv0nvti"
+	queryResult := getWeatherdataByID(id)
+
+	fmt.Println(queryResult)
+
+	if queryResult == nil {
+		t.Error("Got no weatherdata")
+	}
+
+	if queryResult.Id != id {
+		t.Error("Unexpectd id")
+	}
+
+	if queryResult.Index != "yr" {
+		t.Error("Unexpectd index")
+	}
+
+	if queryResult.Type != "weatherdata" {
+		t.Error("Unexpectd type")
+	}
+
+	if queryResult.Source.Location.Name != "Bergen" {
+		t.Error("Unexpectd location name")
+	}
+}
 func TestDeleteWeatherdataByID(t *testing.T) {
 	var id string = "AVxtldwDW33Zbbv0nvtu"
-	var result *DeleteResult = deleteWeatherdataByID(id)
+	var result *CRUDResult = deleteWeatherdataByID(id)
 
 	fmt.Println(*result)
 
