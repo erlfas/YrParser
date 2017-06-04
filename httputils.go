@@ -48,11 +48,29 @@ func doPOSTWithBytes(url string, xBytes []byte) []byte {
 	return body
 }
 
-func doPOST(url string, x interface{}) []byte {
-	xBytes, err := json.MarshalIndent(x, "", " ")
+func doPOST(url string, jsonString string) []byte {
+	jsonBytes := []byte(jsonString)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		log.Println(err.Error())
 		return nil
+	}
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	return body
+}
+
+func doPOSTX(url string, x interface{}) []byte {
+	xBytes, err := json.MarshalIndent(x, "", " ")
+	if err != nil {
+		log.Panic(err.Error())
+		panic(err)
 	}
 
 	return doPOSTWithBytes(url, xBytes)

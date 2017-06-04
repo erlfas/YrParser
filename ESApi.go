@@ -31,14 +31,7 @@ func findAllByCity2(city CityQuery) string {
 
 func findAllByCity(city CityQuery) (string, string) {
 	url := `http://localhost:9200/yr/weatherdata/_search?pretty`
-	queryTemplateContent := `
-	{
-		"query": {
-			"match": {
-				"name": "{{.City}}"
-			}
-		}
-	}`
+	queryTemplateContent := `{ "query": { "bool": { "must": [ { "match": { "Location.Name": "{{.City}}" } } ] } } }`
 	queryTemplate, err := template.New("query").Parse(queryTemplateContent)
 	if err != nil {
 		log.Panic(err.Error())
@@ -55,7 +48,7 @@ func findAllByCity(city CityQuery) (string, string) {
 
 func doFindAllByCity(city CityQuery) string {
 	url, query := findAllByCity(city)
-	byteResults := doPOST(url, []byte(query))
+	byteResults := doPOST(url, query)
 	return string(byteResults)
 }
 

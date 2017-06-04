@@ -12,14 +12,7 @@ func TestFindAllByCity(t *testing.T) {
 	if url != "http://localhost:9200/yr/weatherdata/_search?pretty" {
 		t.Error("url is not as expected")
 	}
-	expectedQuery := `
-	{
-		"query": {
-			"match": {
-				"name": "Bergen"
-			}
-		}
-	}`
+	expectedQuery := `{ "query": { "bool": { "must": [ { "match": { "Location.Name": "Bergen" } } ] } } }`
 	if query != expectedQuery {
 		t.Error("Query is not as expected")
 	}
@@ -39,12 +32,12 @@ func TestDoFindAllByCity2(t *testing.T) {
 
 func TestDoFindAllByCity(t *testing.T) {
 	result := doFindAllByCity(CityQuery{"Bergen"})
-	fmt.Println(result)
+	//fmt.Println(result)
 
-	/**var queryResult QueryResult
+	var queryResult QueryResult
 	if err := json.Unmarshal([]byte(result), &queryResult); err != nil {
 		log.Panic(err.Error())
-	}*/
+	}
 
-	//fmt.Println(queryResult)
+	fmt.Println(queryResult)
 }
