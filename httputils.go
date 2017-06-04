@@ -69,8 +69,8 @@ func doPOST(url string, jsonString string) []byte {
 func doPOSTObject(url string, x interface{}) []byte {
 	xBytes, err := json.MarshalIndent(x, "", " ")
 	if err != nil {
-		log.Panic(err.Error())
-		panic(err)
+		log.Println(err.Error())
+		return nil
 	}
 
 	return doPOSTWithBytes(url, xBytes)
