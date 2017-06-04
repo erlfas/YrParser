@@ -51,6 +51,6 @@ func downloadAndSave(url string, done chan bool) {
 }
 
 func saveWeatherdata(x interface{}) (err error) {
-	doPOSTX("http://localhost:9200/yr/weatherdata", x)
+	doPOSTObject("http://localhost:9200/yr/weatherdata", x)
 	return
 }

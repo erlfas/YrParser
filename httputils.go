@@ -66,7 +66,7 @@ func doPOST(url string, jsonString string) []byte {
 	return body
 }
 
-func doPOSTX(url string, x interface{}) []byte {
+func doPOSTObject(url string, x interface{}) []byte {
 	xBytes, err := json.MarshalIndent(x, "", " ")
 	if err != nil {
 		log.Panic(err.Error())
