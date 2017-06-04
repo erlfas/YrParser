@@ -53,7 +53,7 @@ func getAvgTempByCityUrl(city CityQuery) (string, string) {
 	return url, query
 }
 
-func getWeatherdataByIDAsWeatherdata(id string) *WeatherdataJSON {
+func GetWeatherdataByIDAsWeatherdata(id string) *WeatherdataJSON {
 	var buffer bytes.Buffer
 	buffer.WriteString("http://localhost:9200/yr/weatherdata/")
 	buffer.WriteString(id)
@@ -87,7 +87,7 @@ func getWeatherdataByID(id string) *SingularQueryResult {
 	return &queryResult
 }
 
-func updateWeatherdataByID(id string, weatherdata *WeatherdataSource) *CRUDResult {
+func UpdateWeatherdataByID(id string, weatherdata *WeatherdataSource) *CRUDResult {
 	var buffer bytes.Buffer
 	buffer.WriteString("http://localhost:9200/yr/weatherdata/")
 	buffer.WriteString(id)
@@ -104,7 +104,7 @@ func updateWeatherdataByID(id string, weatherdata *WeatherdataSource) *CRUDResul
 	return &updateResult
 }
 
-func deleteWeatherdataByID(id string) *CRUDResult {
+func DeleteWeatherdataByID(id string) *CRUDResult {
 	var buffer bytes.Buffer
 	buffer.WriteString("http://localhost:9200/yr/weatherdata/")
 	buffer.WriteString(id)
@@ -152,7 +152,7 @@ func findAllByCity(city CityQuery) (string, string) {
 	return url, query
 }
 
-func doFindAllByCity(city CityQuery) string {
+func DoFindAllByCity(city CityQuery) string {
 	url, query := findAllByCity(city)
 	byteResults := doPOST(url, query)
 	return string(byteResults)

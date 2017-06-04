@@ -34,7 +34,7 @@ func TestGetAvgTempByCity(t *testing.T) {
 
 func TestGetWeatherdataByIDAsWeatherdata(t *testing.T) {
 	id := "AVxthxdbW33Zbbv0nvtm"
-	result := getWeatherdataByIDAsWeatherdata(id)
+	result := GetWeatherdataByIDAsWeatherdata(id)
 
 	//jsonString, _ := json.Marshal(result)
 	//fmt.Println(string(jsonString))
@@ -63,7 +63,7 @@ func TestGetWeatherdataByIDAsWeatherdata(t *testing.T) {
 
 	prevVersion := result.Hit.Version
 
-	updateResult := updateWeatherdataByID(id, &result.Hit.Source)
+	updateResult := UpdateWeatherdataByID(id, &result.Hit.Source)
 
 	newVersion := updateResult.Version
 
@@ -82,7 +82,7 @@ func TestGetWeatherdataByIDAsWeatherdata(t *testing.T) {
 		t.Error("Expected created to be false because it should already exist")
 	}
 
-	result2 := getWeatherdataByIDAsWeatherdata(id)
+	result2 := GetWeatherdataByIDAsWeatherdata(id)
 
 	//jsonString3, _ := json.Marshal(result2)
 	//fmt.Println(string(jsonString3))
@@ -137,7 +137,7 @@ func TestGetWeatherdataByID(t *testing.T) {
 
 func TestDeleteWeatherdataByID(t *testing.T) {
 	var id string = "nonExistentID"
-	var result *CRUDResult = deleteWeatherdataByID(id)
+	var result *CRUDResult = DeleteWeatherdataByID(id)
 
 	if result.ID != id {
 		t.Error("Returned id is different from input id")
@@ -180,7 +180,7 @@ func TestDoFindAllByCity2(t *testing.T) {
 }
 
 func TestDoFindAllByCity(t *testing.T) {
-	result := doFindAllByCity(CityQuery{"Bergen"})
+	result := DoFindAllByCity(CityQuery{"Bergen"})
 	//fmt.Println(result)
 
 	var queryResult QueryResult
