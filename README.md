@@ -17,8 +17,15 @@ curl -XGET 'http://localhost:9200/yr/weatherdata/_count?pretty'
 
 ### Search for weatherdata by location name
 
+With curl:
+
 ```
-curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
+curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'{ "query": { "bool": { "must": [ { "match": { "Location.Name": "Bergen" } } ] } } }'
+```
+Pretty:
+
+```
+GET localhost:9200/_search?pretty 
 {
 	"query": {
 		"bool": {
@@ -31,5 +38,5 @@ curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -
 			]
 		}
 	}
-}'
+}
 ```
