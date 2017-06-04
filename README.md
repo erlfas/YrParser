@@ -1,6 +1,6 @@
 # YrParser
 
-Parses xml files from yr.no and load them into an Elasticsearch instance.
+Parses xml files from yr.no and loads them into an Elasticsearch instance.
 
 ## Communicating with Elasticsearch
 
