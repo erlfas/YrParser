@@ -33,8 +33,8 @@ func getWeatherdata(url string) *Weatherdata {
 	xmlReader := bytes.NewReader(body)
 	weatherData := new(Weatherdata)
 	if err := xml.NewDecoder(xmlReader).Decode(weatherData); err != nil {
-		log.Panic(err.Error())
-		panic(err)
+		log.Println(err.Error())
+		return nil
 	}
 
 	fmt.Println(weatherData.Location.Name)
@@ -45,7 +45,9 @@ func getWeatherdata(url string) *Weatherdata {
 func downloadAndSave(url string, done chan bool) {
 	weatherData := getWeatherdata(url)
 
-	saveWeatherdata(weatherData)
+	if weatherData != nil {
+		saveWeatherdata(weatherData)
+	}
 
 	done <- true
 }
