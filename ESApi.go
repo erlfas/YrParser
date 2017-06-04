@@ -7,6 +7,26 @@ import (
 	"log"
 )
 
+type AvgTemperature struct {
+	Aggregations struct {
+		AvgTemperature struct {
+			Value float64 `json:"value"`
+		} `json:"avg_temperature"`
+	} `json:"aggregations"`
+}
+
+func GetAvgTempByCityAsNumber(city CityQuery) float64 {
+	url, query := getAvgTempByCityUrl(city)
+	byteResults := doPOST(url, query)
+
+	var avgTemp AvgTemperature
+	if err := json.Unmarshal(byteResults, &avgTemp); err != nil {
+		log.Panic(err.Error())
+	}
+
+	return avgTemp.Aggregations.AvgTemperature.Value
+}
+
 func GetAvgTempByCity(city CityQuery) string {
 	url, query := getAvgTempByCityUrl(city)
 	byteResults := doPOST(url, query)

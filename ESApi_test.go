@@ -7,12 +7,13 @@ import (
 	"testing"
 )
 
-type AvgTemperature struct {
-	Aggregations struct {
-		AvgTemperature struct {
-			Value float64 `json:"value"`
-		} `json:"avg_temperature"`
-	} `json:"aggregations"`
+func TestGetAvgTempByCityAsNumber(t *testing.T) {
+	avgTemp := GetAvgTempByCityAsNumber(CityQuery{"Bergen"})
+	//fmt.Println(avgTemp)
+
+	if avgTemp == 0 {
+		t.Error("Got 0 as average temperature")
+	}
 }
 
 func TestGetAvgTempByCity(t *testing.T) {
@@ -27,7 +28,7 @@ func TestGetAvgTempByCity(t *testing.T) {
 	fmt.Println(avgTemp)
 
 	if avgTemp.Aggregations.AvgTemperature.Value == 0 {
-		t.Error("Go 0 as avg temp")
+		t.Error("Got 0 as average temperature")
 	}
 }
 
