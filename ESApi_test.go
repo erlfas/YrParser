@@ -2,13 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"testing"
 )
 
 func TestGetWeatherdataByIDAsWeatherdata(t *testing.T) {
-	id := "AVxtAEeRW33Zbbv0nvti"
+	id := "AVxthxdbW33Zbbv0nvtm"
 	result := getWeatherdataByIDAsWeatherdata(id)
 
 	//jsonString, _ := json.Marshal(result)
@@ -34,19 +33,20 @@ func TestGetWeatherdataByIDAsWeatherdata(t *testing.T) {
 		t.Error("Unexpectd location name")
 	}
 
-	if result.Source.Location.Type != "By" {
-		t.Error("Type was not updated from By to Storby")
+	result.Source.Location.Type = "asdf"
+
+	prevVersion := result.Hit.Version
+
+	updateResult := updateWeatherdataByID(id, &result.Hit.Source)
+
+	newVersion := updateResult.Version
+
+	if prevVersion == newVersion {
+		t.Error("Expected incremented version number")
 	}
 
-	result.Source.Location.Type = "Storby"
-
-	//jsonString, _ := json.Marshal(result)
-	//fmt.Println(string(jsonString))
-
-	updateResult := updateWeatherdataByID(id, result)
-
-	jsonUpdate, _ := json.Marshal(updateResult)
-	fmt.Println(string(jsonUpdate))
+	//jsonUpdate, _ := json.Marshal(updateResult)
+	//fmt.Println(string(jsonUpdate))
 
 	if updateResult == nil {
 		t.Error("No update result")
@@ -54,10 +54,6 @@ func TestGetWeatherdataByIDAsWeatherdata(t *testing.T) {
 
 	if updateResult.Created != false {
 		t.Error("Expected created to be false because it should already exist")
-	}
-
-	if updateResult.Found == false {
-		t.Error("Excpected found to be true")
 	}
 
 	result2 := getWeatherdataByIDAsWeatherdata(id)
@@ -84,17 +80,13 @@ func TestGetWeatherdataByIDAsWeatherdata(t *testing.T) {
 	if result2.Source.Location.Name != "Bergen" {
 		t.Error("Unexpectd location name")
 	}
-
-	if result2.Source.Location.Type != "Storby" {
-		t.Error("Type was not updated from By to Storby")
-	}
 }
 
 func TestGetWeatherdataByID(t *testing.T) {
-	id := "AVxtAEeRW33Zbbv0nvti"
+	id := "AVxthxdbW33Zbbv0nvtm"
 	queryResult := getWeatherdataByID(id)
 
-	fmt.Println(queryResult)
+	//fmt.Println(queryResult)
 
 	if queryResult == nil {
 		t.Error("Got no weatherdata")
@@ -118,10 +110,8 @@ func TestGetWeatherdataByID(t *testing.T) {
 }
 
 func TestDeleteWeatherdataByID(t *testing.T) {
-	var id string = "AVxtldwDW33Zbbv0nvtu"
+	var id string = "nonExistentID"
 	var result *CRUDResult = deleteWeatherdataByID(id)
-
-	fmt.Println(*result)
 
 	if result.ID != id {
 		t.Error("Returned id is different from input id")
@@ -160,7 +150,7 @@ func TestDoFindAllByCity2(t *testing.T) {
 		log.Panic(err.Error())
 	}
 
-	fmt.Println(queryResult)
+	//fmt.Println(queryResult)
 }
 
 func TestDoFindAllByCity(t *testing.T) {
@@ -172,5 +162,5 @@ func TestDoFindAllByCity(t *testing.T) {
 		log.Panic(err.Error())
 	}
 
-	fmt.Println(queryResult)
+	//fmt.Println(queryResult)
 }

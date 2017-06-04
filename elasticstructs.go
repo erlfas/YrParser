@@ -60,68 +60,71 @@ type Weatherdata struct {
 }
 
 type Hit struct {
-	Index  string  `json:"_index"`
-	Type   string  `json:"_type"`
-	Id     string  `json:"_id"`
-	Score  float64 `json:"_score"`
-	Source struct {
+	Index   string            `json:"_index"`
+	Type    string            `json:"_type"`
+	Id      string            `json:"_id"`
+	Score   float64           `json:"_score"`
+	Version int64             `json:"_version"`
+	Source  WeatherdataSource `json:"_source"`
+}
+
+type WeatherdataSource struct {
+	Location struct {
+		Name     string `json:"name"`
+		Type     string `json:"type"`
+		Country  string `json:"country"`
+		Timezone struct {
+			Id               string `json:"id"`
+			UtcoffsetMinutes string `json:"utcoffsetMinutes"`
+		} `xml:"timezone"`
 		Location struct {
-			Name     string `json:"name"`
-			Type     string `json:"type"`
-			Country  string `json:"country"`
-			Timezone struct {
-				Id               string `json:"id"`
-				UtcoffsetMinutes string `json:"utcoffsetMinutes"`
-			} `xml:"timezone"`
-			Location struct {
-				Altitude  int64   `json:"altitude"`
-				Latitude  float64 `json:"latitude"`
-				Longitude float64 `json:"longitude"`
-				Geobase   string  `json:"geobase"`
-				Geobaseid int64   `json:"geobaseid"`
-			} `json:"location"`
+			Altitude  int64   `json:"altitude"`
+			Latitude  float64 `json:"latitude"`
+			Longitude float64 `json:"longitude"`
+			Geobase   string  `json:"geobase"`
+			Geobaseid int64   `json:"geobaseid"`
 		} `json:"location"`
-		Meta struct {
-			Lastupdate string `json:"lastupdate"`
-			Nextupdate string `json:"nextupdate"`
-		} `xml:"meta"`
-		Forecast struct {
-			Tabular struct {
-				Time []struct {
-					From   string `json:"from"`
-					To     string `json:"to"`
-					Symbol struct {
-						Number   int64  `json:"number"`
-						NumberEx int64  `json:"numberEx"`
-						Name     string `json:"name"`
-						Var      string `json:"var"`
-					} `json:"symbol"`
-					Precipitation struct {
-						Value    float64 `json:"value"`
-						Minvalue float64 `json:"minvalue"`
-						Maxvalue float64 `json:"maxvalue"`
-					} `json:"precipitation"`
-					WindDirection struct {
-						Deg  float64 `json:"deg"`
-						Code string  `json:"code"`
-						Name string  `json:"name"`
-					} `json:"windDirection"`
-					WindSpeed struct {
-						Mps  float64 `json:"mps"`
-						Name string  `json:"name"`
-					} `json:"windSpeed"`
-					Temperature struct {
-						Unit  string `json:"unit"`
-						Value int64  `json:"value"`
-					} `json:"temperature"`
-					Pressure struct {
-						Unit  string  `jsonxml:"unit"`
-						Value float64 `json:"value"`
-					} `json:"pressure"`
-				} `json:"time"`
-			} `json:"tabular"`
-		} `json:"forecast"`
-	} `json:"_source"`
+	} `json:"location"`
+	Meta struct {
+		Lastupdate string `json:"lastupdate"`
+		Nextupdate string `json:"nextupdate"`
+	} `xml:"meta"`
+	Forecast struct {
+		Tabular struct {
+			Time []struct {
+				From   string `json:"from"`
+				To     string `json:"to"`
+				Symbol struct {
+					Number   int64  `json:"number"`
+					NumberEx int64  `json:"numberEx"`
+					Name     string `json:"name"`
+					Var      string `json:"var"`
+				} `json:"symbol"`
+				Precipitation struct {
+					Value    float64 `json:"value"`
+					Minvalue float64 `json:"minvalue"`
+					Maxvalue float64 `json:"maxvalue"`
+				} `json:"precipitation"`
+				WindDirection struct {
+					Deg  float64 `json:"deg"`
+					Code string  `json:"code"`
+					Name string  `json:"name"`
+				} `json:"windDirection"`
+				WindSpeed struct {
+					Mps  float64 `json:"mps"`
+					Name string  `json:"name"`
+				} `json:"windSpeed"`
+				Temperature struct {
+					Unit  string `json:"unit"`
+					Value int64  `json:"value"`
+				} `json:"temperature"`
+				Pressure struct {
+					Unit  string  `jsonxml:"unit"`
+					Value float64 `json:"value"`
+				} `json:"pressure"`
+			} `json:"time"`
+		} `json:"tabular"`
+	} `json:"forecast"`
 }
 
 type WeatherdataJSON struct {
