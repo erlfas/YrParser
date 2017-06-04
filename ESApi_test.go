@@ -33,6 +33,7 @@ func TestGetWeatherdataByID(t *testing.T) {
 		t.Error("Unexpectd location name")
 	}
 }
+
 func TestDeleteWeatherdataByID(t *testing.T) {
 	var id string = "AVxtldwDW33Zbbv0nvtu"
 	var result *CRUDResult = deleteWeatherdataByID(id)
