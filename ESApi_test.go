@@ -32,8 +32,19 @@ func TestDoFindAllByCity2(t *testing.T) {
 	var queryResult QueryResult
 	if err := json.Unmarshal([]byte(result), &queryResult); err != nil {
 		log.Panic(err.Error())
-		panic(err)
 	}
 
 	fmt.Println(queryResult)
+}
+
+func TestDoFindAllByCity(t *testing.T) {
+	result := doFindAllByCity(CityQuery{"Bergen"})
+	fmt.Println(result)
+
+	/**var queryResult QueryResult
+	if err := json.Unmarshal([]byte(result), &queryResult); err != nil {
+		log.Panic(err.Error())
+	}*/
+
+	//fmt.Println(queryResult)
 }

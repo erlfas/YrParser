@@ -6,6 +6,17 @@ import (
 	"log"
 )
 
+func deleteWeatherdataByID(id string) string {
+	var buffer bytes.Buffer
+	buffer.WriteString("http://localhost:9200/yr/weatherdata/")
+	buffer.WriteString(id)
+	url := buffer.String()
+
+	byteResults := doDELETE(url)
+
+	return string(byteResults)
+}
+
 type CityQuery struct {
 	City string
 }
@@ -31,17 +42,21 @@ func findAllByCity(city CityQuery) (string, string) {
 	queryTemplate, err := template.New("query").Parse(queryTemplateContent)
 	if err != nil {
 		log.Panic(err.Error())
-		panic(err)
 	}
 	var buf bytes.Buffer
 	err = queryTemplate.Execute(&buf, city)
 	if err != nil {
 		log.Panic(err.Error())
-		panic(err)
 	}
 	query := buf.String()
 
 	return url, query
+}
+
+func doFindAllByCity(city CityQuery) string {
+	url, query := findAllByCity(city)
+	byteResults := doPOST(url, []byte(query))
+	return string(byteResults)
 }
 
 func doFindAllByCity2(city CityQuery) string {
