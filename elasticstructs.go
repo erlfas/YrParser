@@ -146,4 +146,5 @@ type CRUDResult struct {
 	Type    string `json:"_type"`
 	ID      string `json:"_id"`
 	Version int64  `json:"_version"`
+	Created bool   `json:"created"`
 }

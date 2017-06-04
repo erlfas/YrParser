@@ -41,7 +41,7 @@ func getWeatherdataByID(id string) *SingularQueryResult {
 	return &queryResult
 }
 
-func updateWeatherdataByID(id string, weatherdata *Weatherdata) *CRUDResult {
+func updateWeatherdataByID(id string, weatherdata *WeatherdataJSON) *CRUDResult {
 	var buffer bytes.Buffer
 	buffer.WriteString("http://localhost:9200/yr/weatherdata/")
 	buffer.WriteString(id)

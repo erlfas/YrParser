@@ -15,21 +15,21 @@ func doUPDATE(url string, x interface{}) []byte {
 		return nil
 	}
 
-	body := doMethod("UPDATE", url, string(xBytes))
+	body := doMethod("PUT", url, xBytes)
 
 	return body
 }
 
 func doDELETE(url string) []byte {
-	body := doMethod("DELETE", url, "")
+	body := doMethod("DELETE", url, []byte{})
 
 	return body
 }
 
-func doMethod(method string, url string, jsonBody string) []byte {
+func doMethod(method string, url string, jsonBody []byte) []byte {
 	client := http.Client{}
 
-	req, err := http.NewRequest(method, url, bytes.NewBufferString(jsonBody))
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(jsonBody))
 	if err != nil {
 		log.Println(err.Error())
 		return nil
