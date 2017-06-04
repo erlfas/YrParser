@@ -21,7 +21,8 @@ func GetAvgTempByCityAsNumber(city CityQuery) float64 {
 
 	var avgTemp AvgTemperature
 	if err := json.Unmarshal(byteResults, &avgTemp); err != nil {
-		log.Panic(err.Error())
+		log.Println(err.Error())
+		return 0
 	}
 
 	return avgTemp.Aggregations.AvgTemperature.Value
