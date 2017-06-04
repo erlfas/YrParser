@@ -92,12 +92,14 @@ func findAllByCity(city CityQuery) (string, string) {
 	queryTemplateContent := `{ "query": { "bool": { "must": [ { "match": { "Location.Name": "{{.City}}" } } ] } } }`
 	queryTemplate, err := template.New("query").Parse(queryTemplateContent)
 	if err != nil {
-		log.Panic(err.Error())
+		log.Println(err.Error())
+		return "", ""
 	}
 	var buf bytes.Buffer
 	err = queryTemplate.Execute(&buf, city)
 	if err != nil {
-		log.Panic(err.Error())
+		log.Println(err.Error())
+		return "", ""
 	}
 	query := buf.String()
 
