@@ -2,9 +2,34 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"testing"
 )
+
+type AvgTemperature struct {
+	Aggregations struct {
+		AvgTemperature struct {
+			Value float64 `json:"value"`
+		} `json:"avg_temperature"`
+	} `json:"aggregations"`
+}
+
+func TestGetAvgTempByCity(t *testing.T) {
+	jsonResult := GetAvgTempByCity(CityQuery{"Bergen"})
+	//fmt.Println(jsonResult)
+
+	var avgTemp AvgTemperature
+	if err := json.Unmarshal([]byte(jsonResult), &avgTemp); err != nil {
+		log.Panic(err.Error())
+	}
+
+	fmt.Println(avgTemp)
+
+	if avgTemp.Aggregations.AvgTemperature.Value == 0 {
+		t.Error("Go 0 as avg temp")
+	}
+}
 
 func TestGetWeatherdataByIDAsWeatherdata(t *testing.T) {
 	id := "AVxthxdbW33Zbbv0nvtm"

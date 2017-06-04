@@ -47,9 +47,10 @@ func downloadAndSave(url string, done chan bool) {
 
 	if weatherData != nil {
 		saveWeatherdata(weatherData)
+		done <- true
+	} else {
+		done <- false
 	}
-
-	done <- true
 }
 
 func saveWeatherdata(x interface{}) (err error) {

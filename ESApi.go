@@ -7,6 +7,31 @@ import (
 	"log"
 )
 
+func GetAvgTempByCity(city CityQuery) string {
+	url, query := getAvgTempByCityUrl(city)
+	byteResults := doPOST(url, query)
+	return string(byteResults)
+}
+
+func getAvgTempByCityUrl(city CityQuery) (string, string) {
+	url := `http://localhost:9200/yr/weatherdata/_search?pretty`
+	queryTemplateContent := `{ "aggs": { "avg_temperature": { "avg": { "field": "Forecast.Tabular.Time.Temperature.Value" } } }, "query": { "bool": { "must": [ { "match": { "Location.Name": "{{.City}}" } } ] } } }`
+	queryTemplate, err := template.New("query").Parse(queryTemplateContent)
+	if err != nil {
+		log.Println(err.Error())
+		return "", ""
+	}
+	var buf bytes.Buffer
+	err = queryTemplate.Execute(&buf, city)
+	if err != nil {
+		log.Println(err.Error())
+		return "", ""
+	}
+	query := buf.String()
+
+	return url, query
+}
+
 func getWeatherdataByIDAsWeatherdata(id string) *WeatherdataJSON {
 	var buffer bytes.Buffer
 	buffer.WriteString("http://localhost:9200/yr/weatherdata/")

@@ -1,0 +1,20 @@
+{
+	"aggs": {
+		"avg_temperature": {
+			"avg": {
+				"field": "Forecast.Tabular.Time.Temperature.Value"
+			}
+		}
+	},
+	"query": {
+		"bool": {
+			"must": [ 
+				{
+					"match": {
+						"Location.Name": "Bergen"
+					}
+				}
+			]
+		}
+	}
+}
