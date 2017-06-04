@@ -7,6 +7,33 @@ import (
 	"testing"
 )
 
+func TestGetWeatherdataByIDAsWeatherdata(t *testing.T) {
+	id := "AVxtAEeRW33Zbbv0nvti"
+	result := getWeatherdataByIDAsWeatherdata(id)
+
+	fmt.Println(result)
+
+	if result == nil {
+		t.Error("Got no weatherdata")
+	}
+
+	if result.Id != id {
+		t.Error("Unexpectd id")
+	}
+
+	if result.Index != "yr" {
+		t.Error("Unexpectd index")
+	}
+
+	if result.Type != "weatherdata" {
+		t.Error("Unexpectd type")
+	}
+
+	if result.Source.Location.Name != "Bergen" {
+		t.Error("Unexpectd location name")
+	}
+}
+
 func TestGetWeatherdataByID(t *testing.T) {
 	id := "AVxtAEeRW33Zbbv0nvti"
 	queryResult := getWeatherdataByID(id)
@@ -56,6 +83,7 @@ func TestDeleteWeatherdataByID(t *testing.T) {
 		t.Error("Did not expect to delete a document")
 	}
 }
+
 func TestFindAllByCity(t *testing.T) {
 	url, query := findAllByCity(CityQuery{"Bergen"})
 	if url != "http://localhost:9200/yr/weatherdata/_search?pretty" {

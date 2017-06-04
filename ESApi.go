@@ -7,6 +7,23 @@ import (
 	"log"
 )
 
+func getWeatherdataByIDAsWeatherdata(id string) *WeatherdataJSON {
+	var buffer bytes.Buffer
+	buffer.WriteString("http://localhost:9200/yr/weatherdata/")
+	buffer.WriteString(id)
+	url := buffer.String()
+
+	byteResults := doGET(url)
+
+	var result WeatherdataJSON
+	if err := json.Unmarshal(byteResults, &result); err != nil {
+		log.Println(err.Error())
+		return nil
+	}
+
+	return &result
+}
+
 func getWeatherdataByID(id string) *SingularQueryResult {
 	var buffer bytes.Buffer
 	buffer.WriteString("http://localhost:9200/yr/weatherdata/")

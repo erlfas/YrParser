@@ -124,6 +124,10 @@ type Hit struct {
 	} `json:"_source"`
 }
 
+type WeatherdataJSON struct {
+	Hit
+}
+
 type Hits struct {
 	Hits []Hit `json:"hits"`
 }
